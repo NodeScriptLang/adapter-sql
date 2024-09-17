@@ -1,7 +1,7 @@
 import { Schema } from 'airtight';
 
 export interface SqlModificationResult {
-    rows?: any[];
+    rows?: Record<string, any>[];
     fieldData: Record<string, any>;
 }
 
