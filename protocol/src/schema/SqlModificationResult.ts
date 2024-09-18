@@ -6,7 +6,7 @@ export interface SqlModificationResult {
     command: string;
     rows?: Record<string, any>[];
     fieldData?: FieldInfo[];
-    affectedRows: number;
+    affectedRowCount: number;
 }
 
 export const SqlModificationResultSchema = new Schema<SqlModificationResult>({
@@ -27,6 +27,6 @@ export const SqlModificationResultSchema = new Schema<SqlModificationResult>({
             items: FieldInfoSchema.schema,
             optional: true
         },
-        affectedRows: { type: 'number' },
+        affectedRowCount: { type: 'number' },
     }
 });
