@@ -1,8 +1,11 @@
 import { Schema } from 'airtight';
 
+import { FieldInfo, FieldInfoSchema } from './FieldInfo.js';
+
 export interface SqlQueryResult {
     rows: Record<string, any>[];
-    fieldData?: Record<string, any>;
+    rowCount: number;
+    fieldData: FieldInfo[];
 }
 
 export const SqlQueryResultSchema = new Schema<SqlQueryResult>({
@@ -16,11 +19,10 @@ export const SqlQueryResultSchema = new Schema<SqlQueryResult>({
                 additionalProperties: { type: 'any' }
             }
         },
+        rowCount: { type: 'integer' },
         fieldData: {
-            type: 'object',
-            properties: {},
-            additionalProperties: { type: 'any' },
-            optional: true,
+            type: 'array',
+            items: FieldInfoSchema.schema,
         }
 
     }

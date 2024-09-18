@@ -1,13 +1,19 @@
 import { Schema } from 'airtight';
 
+import { FieldInfo, FieldInfoSchema } from './FieldInfo.js';
+
 export interface SqlModificationResult {
+    command: string;
     rows?: Record<string, any>[];
-    fieldData: Record<string, any>;
+    fieldData?: FieldInfo[];
+
+    affectedRows: number;
 }
 
 export const SqlModificationResultSchema = new Schema<SqlModificationResult>({
     type: 'object',
     properties: {
+        command: { type: 'string' },
         rows: {
             type: 'array',
             items: {
@@ -18,9 +24,10 @@ export const SqlModificationResultSchema = new Schema<SqlModificationResult>({
             optional: true
         },
         fieldData: {
-            type: 'object',
-            properties: {},
-            additionalProperties: { type: 'any' }
-        }
+            type: 'array',
+            items: FieldInfoSchema.schema,
+            optional: true
+        },
+        affectedRows: { type: 'number' },
     }
 });
