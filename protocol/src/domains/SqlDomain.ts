@@ -25,7 +25,6 @@ export interface SqlDomain {
         connectionUrl: string;
         query: string;
         params: any[];
-        includeFieldData?: boolean;
     }): Promise<{ result: SqlQueryResult }>;
 }
 
@@ -62,7 +61,6 @@ export const SqlDomain: DomainDef<SqlDomain> = {
                 connectionUrl: { type: 'string' },
                 query: { type: 'string' },
                 params: { type: 'array', items: { type: 'any' } },
-                includeFieldData: { type: 'boolean', optional: true, default: false }
             },
             returns: { result: SqlQueryResultSchema.schema }
         }
