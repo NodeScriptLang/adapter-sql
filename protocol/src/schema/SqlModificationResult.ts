@@ -6,7 +6,6 @@ export interface SqlModificationResult {
     command: string;
     rows?: Record<string, any>[];
     fieldData?: FieldInfo[];
-
     affectedRows: number;
 }
 
