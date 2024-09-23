@@ -1,6 +1,5 @@
 import { DomainDef } from '@nodescript/protocomm';
 
-import { SqlDefinitionResult, SqlDefinitionResultSchema } from '../schema/SqlDefinitionResult.js';
 import { SqlModificationResult, SqlModificationResultSchema } from '../schema/SqlModificationResult.js';
 import { SqlQueryResult, SqlQueryResultSchema } from '../schema/SqlQueryResult.js';
 
@@ -13,7 +12,7 @@ export interface SqlDomain {
     executeDefinition(req: {
         connectionUrl: string;
         definition: string;
-    }): Promise<{ result: SqlDefinitionResult }>;
+    }): Promise<{}>;
 
     executeModification(req: {
         connectionUrl: string;
@@ -44,7 +43,7 @@ export const SqlDomain: DomainDef<SqlDomain> = {
                 connectionUrl: { type: 'string' },
                 definition: { type: 'string' },
             },
-            returns: { result: SqlDefinitionResultSchema.schema },
+            returns: {},
         },
         executeModification: {
             type: 'command',

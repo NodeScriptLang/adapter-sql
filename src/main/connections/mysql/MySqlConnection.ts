@@ -1,23 +1,25 @@
-import { SqlDefinitionResult, SqlModificationResult, SqlQueryResult } from '@nodescript/adapter-sql-protocol';
+import { SqlModificationResult, SqlQueryResult } from '@nodescript/adapter-sql-protocol';
 import { FieldPacket, PoolConnection, QueryResult, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 
 import { SqlError } from '../../global/SqlError.js';
+import { BaseConnection } from '../BaseConnection.js';
 import { getMySqlTypeByCode } from './MySqlFieldTypeMap.js';
 
-export class MySqlConnection {
+export class MySqlConnection extends BaseConnection {
     constructor(
         protected client: PoolConnection
-    ) {}
-    async define(text: string): Promise<SqlDefinitionResult> {
+    ) {
+        super(client);
+    }
+
+    async define(text: string): Promise<void> {
         await this.execute(text);
-        return { command: text.split(' ')[0] };
     }
 
     async modify(text: string, params?: any[]): Promise<SqlModificationResult> {
         const [result,] = await this.execute<ResultSetHeader>(text, params);
 
         return {
-            command: text.split(' ')[0],
             affectedRowCount: result.affectedRows,
         };
     }

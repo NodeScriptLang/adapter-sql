@@ -1,28 +1,29 @@
-import { SqlDefinitionResult, SqlModificationResult, SqlQueryResult } from '@nodescript/adapter-sql-protocol';
+import { SqlModificationResult, SqlQueryResult } from '@nodescript/adapter-sql-protocol';
 import pg, { FieldDef, PoolClient } from 'pg';
 
 import { SqlError } from '../../global/SqlError.js';
+import { BaseConnection } from '../BaseConnection.js';
 
-export class PostgresConnection {
+
+export class PostgresConnection extends BaseConnection {
     private postgresTypes: Record<string, string>;
     constructor(
         protected client: PoolClient
     ) {
+        super(client);
         this.postgresTypes = Object.fromEntries(
             Object.entries(pg.types.builtins).map(([name, oid]) => [oid, name])
         );
     }
 
-    async define(text: string): Promise<SqlDefinitionResult> {
-        const res = await this.execute(text);
-        return { command: res.command };
+    async define(text: string): Promise<void> {
+        await this.execute(text);
     }
 
     async modify(text: string, params?: any[]): Promise<SqlModificationResult> {
         const res = await this.execute(text, params);
 
         return {
-            command: res.command,
             affectedRowCount: res.rowCount ?? 0,
             rows: res.rows,
             fieldData: this.getFieldData(res.fields)
