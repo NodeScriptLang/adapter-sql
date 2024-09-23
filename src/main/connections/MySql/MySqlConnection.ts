@@ -2,7 +2,7 @@ import { SqlDefinitionResult, SqlModificationResult, SqlQueryResult } from '@nod
 import { FieldPacket, PoolConnection, QueryResult, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 
 import { SqlError } from '../../global/SqlError.js';
-import { getMySqlTypeByCode } from '../SqlTypeMaps.js';
+import { getMySqlTypeByCode } from './MySqlFieldTypeMap.js';
 
 export class MySqlConnection {
     constructor(
