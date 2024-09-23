@@ -11,8 +11,8 @@ export class TestRuntime {
     @dep({ cache: false }) Sql!: SqlDomainImpl;
     @dep({ cache: false }) testDb!: TestDb;
     @config({ default: '8080' }) HTTP_PORT!: string;
-    @config() POSTGRES_BASE_URL!: string;
-    @config() MYSQL_BASE_URL!: string;
+    @config({ default: 'postgresql://postgres@localhost:5011' }) POSTGRES_BASE_URL!: string;
+    @config({ default: 'mysql://root@localhost:5010' }) MYSQL_BASE_URL!: string;
     @config({ default: 'adaptersqltest' }) DB_NAME!: string;
 
 

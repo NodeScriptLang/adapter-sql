@@ -36,9 +36,30 @@ Ensure the user/password you use for your database management has admin and/or c
 
 ## Testing
 
-Before running tests, ensure you have a supported sql server running locally with a database configured. In `.env.test` file you will need to set:
+Before running tests, ensure you have a supported sql server running locally with a database configured.
 
-- **POSTGRES_BASE_URL** - e.g: `postgres://root:admin123@localhost:2345`
-- **MYSQL_BASE_URL** - e.g: `mysql://root:admin123@localhost:2345`
+Optionally, you can set up docker to host your databases:
 
-This allows the tests to setup and teardown a test database.
+MySql container:
+```
+docker run --name mysql-adapter-test \
+  -e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
+  -p 5010:3306 \
+  -d mysql
+```
+Postgres container:
+```
+docker run --name postgres-adapter-test \
+  -e POSTGRES_HOST_AUTH_METHOD=trust \
+  -p 5011:5432 \
+  -d postgres
+```
+
+If you aren't using docker, in `.env.test` or just a `.env` (gitignored), file you will need to set two variables:
+
+- **MYSQL_BASE_URL**: `mysql://<user>:<password>@<host>:<port>` 
+    - e.g: `mysql://root:admin123@localhost:5010`
+- **POSTGRES_BASE_URL**: `postgresql://<user>:<password>@<host>:<port>`
+    - e.g: `postgresql://postgres:admin123@localhost:5011`
+
+Replacing your local connection details as necessary. This allows the tests to setup and teardown a test database.

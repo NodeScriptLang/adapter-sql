@@ -18,15 +18,11 @@ describe('SqlDomain', () => {
 
         it('defines', async () => {
             const connectionUrl = runtime.testPostgresUrl;
-            try {
-                const result = await runtime.Sql.executeDefinition({
-                    connectionUrl,
-                    definition: 'CREATE TABLE defined (id SERIAL PRIMARY KEY);'
-                });
-                assert.ok(result);
-            } catch (error: any) {
-                assert.fail(`Error thrown during table creation: ${error.message}`);
-            }
+            const result = await runtime.Sql.executeDefinition({
+                connectionUrl,
+                definition: 'CREATE TABLE psqldefined (id SERIAL PRIMARY KEY);'
+            });
+            assert.ok(result);
         });
 
         it('modifies', async () => {
@@ -62,7 +58,7 @@ describe('SqlDomain', () => {
             const connectionUrl = runtime.testMySqlUrl;
             const result = await runtime.Sql.executeDefinition({
                 connectionUrl,
-                definition: 'CREATE TABLE defined (id SERIAL PRIMARY KEY);'
+                definition: 'CREATE TABLE mysqldefined (id SERIAL PRIMARY KEY);'
             });
             assert.ok(result);
         });
