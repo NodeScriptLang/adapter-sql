@@ -2,8 +2,8 @@ import { Logger } from '@nodescript/logger';
 import { config } from 'mesh-config';
 import { dep, Mesh } from 'mesh-ioc';
 
-import { MySqlPool } from '../connections/MySql/MySqlPool.js';
-import { PostgresPool } from '../connections/Postgres/PostgresPool.js';
+import { MySqlPool } from '../connections/mysql/MySqlPool.js';
+import { PostgresPool } from '../connections/postgres/PostgresPool.js';
 
 export class ConnectionManager {
 
