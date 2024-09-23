@@ -1,13 +1,9 @@
 import { Logger } from '@nodescript/logger';
 import { config } from 'mesh-config';
 import { dep, Mesh } from 'mesh-ioc';
-import { createPool, Pool } from 'mysql2/promise';
-import pg from 'pg';
 
-import { MySqlConnection } from '../connections/MySqlConnection.js';
-import { PostgresConnection } from '../connections/PostgresConnection.js';
-
-const { Pool } = pg;
+import { MySqlPool } from '../connections/MySql/MySqlPool.js';
+import { PostgresPool } from '../connections/Postgres/PostgresPool.js';
 
 export class ConnectionManager {
 
@@ -19,7 +15,7 @@ export class ConnectionManager {
     @dep() private mesh!: Mesh;
     @dep() private logger!: Logger;
 
-    private connectionMap = new Map<string, PostgresConnection | MySqlConnection>();
+    private poolMap = new Map<string, PostgresPool | MySqlPool>();
     private running = false;
     private sweepPromise: Promise<void> = Promise.resolve();
 
@@ -37,51 +33,39 @@ export class ConnectionManager {
         await this.closeAllConnections();
     }
 
-    getConnection(url: string) {
-        const { connectionUrl, connectionKey } = this.prepareConnectionDetails(url);
-        const existing = this.connectionMap.get(connectionKey);
+    getPool(url: string) {
+        const { connectionUrl, poolKey } = this.prepareConnectionDetails(url);
+        const existing = this.poolMap.get(poolKey);
         if (existing) {
             return existing;
         }
-        const connection = this.selectConnection(connectionUrl, connectionKey);
-        this.connectionMap.set(connectionKey, connection);
-        this.mesh.connect(connection);
-        return connection;
+        const pool = this.selectPool(connectionUrl, poolKey);
+        this.poolMap.set(poolKey, pool);
+        this.mesh.connect(pool);
+        return pool;
     }
 
-    private selectConnection(connectionUrl: string, connectionKey: string) {
+    private selectPool(connectionUrl: string, poolKey: string) {
         if (connectionUrl.startsWith('mysql')) {
-            const pool = createPool({
-                uri: connectionUrl,
-                connectionLimit: this.POOL_SIZE,
-                waitForConnections: true,
-                queueLimit: 0,
-                connectTimeout: this.CONNECT_TIMEOUT_MS,
-            });
-            return new MySqlConnection(connectionKey, pool);
+            return new MySqlPool(connectionUrl, poolKey, this.POOL_SIZE, this.CONNECT_TIMEOUT_MS);
         }
         if (connectionUrl.startsWith('postgres')) {
-            const pool = new Pool({
-                connectionString: connectionUrl,
-                max: this.POOL_SIZE,
-                connectionTimeoutMillis: this.CONNECT_TIMEOUT_MS,
-            });
-            return new PostgresConnection(connectionKey, pool);
+            return new PostgresPool(connectionUrl, poolKey, this.POOL_SIZE, this.CONNECT_TIMEOUT_MS);
         }
         throw new Error('Invalid connection string');
     }
 
     private async closeAllConnections() {
-        const conns = [...this.connectionMap.values()];
-        this.connectionMap.clear();
+        const conns = [...this.poolMap.values()];
+        this.poolMap.clear();
         await Promise.all(conns.map(_ => _.closeGracefully()));
     }
 
     private async closeExpired() {
-        const expiredConnections = [...this.connectionMap.values()].filter(_ => _.age > this.POOL_TTL_MS);
-        this.logger.info(`Sweep: closing ${expiredConnections.length} expired connections`);
+        const expiredConnections = [...this.poolMap.values()].filter(_ => _.age > this.POOL_TTL_MS);
+        this.logger.info(`Sweep: closing ${expiredConnections.length} expired pools`);
         for (const conn of expiredConnections) {
-            this.connectionMap.delete(conn.connectionKey);
+            this.poolMap.delete(conn.poolKey);
             await conn.closeGracefully();
         }
     }
@@ -101,8 +85,8 @@ export class ConnectionManager {
         parsedUrl.search = '';
         const connectionUrl = parsedUrl.href;
         parsedUrl.password = '';
-        const connectionKey = parsedUrl.href;
-        return { connectionUrl, connectionKey };
+        const poolKey = parsedUrl.href;
+        return { connectionUrl, poolKey };
     }
 
 }

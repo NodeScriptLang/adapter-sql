@@ -47,8 +47,8 @@ export class SqlDomainImpl implements SqlDomain {
     }
 
     private async getConnection(databaseUrl: string) {
-        const conn = this.connectionManager.getConnection(databaseUrl);
-        await conn.connect();
-        return conn;
+        const pool = this.connectionManager.getPool(databaseUrl);
+        const client = await pool.connect();
+        return client;
     }
 }

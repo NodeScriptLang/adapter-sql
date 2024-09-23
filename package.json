@@ -44,6 +44,7 @@
     "@nodescript/metrics": "^1.5.0",
     "@nodescript/microframework": "^1.12.0",
     "@nodescript/protocomm": "^1.1.0",
+    "@types/mysql": "^2.15.26",
     "airtight": "^5.7.2",
     "dotenv": "^16.4.5",
     "mesh-config": "^1.1.2",

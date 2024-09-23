@@ -1,4 +1,4 @@
-export const MySqlTypeMap: { [key: number]: string } = {
+export const MySqlFieldTypeMap: { [key: number]: string } = {
     0: 'DECIMAL',
     1: 'TINY',
     2: 'SHORT',
@@ -22,5 +22,5 @@ export const MySqlTypeMap: { [key: number]: string } = {
 };
 
 export function getMySqlTypeByCode(code: number | undefined) {
-    return code ? MySqlTypeMap[code] : 'Unknown';
+    return code ? MySqlFieldTypeMap[code] : 'Unknown';
 }
