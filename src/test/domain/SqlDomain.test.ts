@@ -60,15 +60,11 @@ describe('SqlDomain', () => {
 
         it('defines', async () => {
             const connectionUrl = runtime.testMySqlUrl;
-            try {
-                const result = await runtime.Sql.executeDefinition({
-                    connectionUrl,
-                    definition: 'CREATE TABLE defined (id SERIAL PRIMARY KEY);'
-                });
-                assert.ok(result);
-            } catch (error: any) {
-                assert.fail(`Error thrown during table creation: ${error.message}`);
-            }
+            const result = await runtime.Sql.executeDefinition({
+                connectionUrl,
+                definition: 'CREATE TABLE defined (id SERIAL PRIMARY KEY);'
+            });
+            assert.ok(result);
         });
 
         it('modifies', async () => {

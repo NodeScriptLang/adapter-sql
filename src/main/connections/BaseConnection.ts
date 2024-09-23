@@ -7,7 +7,7 @@ import { PoolClient } from 'pg';
 export abstract class BaseConnection {
     @dep() logger!: Logger;
 
-    constructor(protected client: PoolClient | PoolConnection) { this.client = client; }
+    constructor(protected client: PoolClient | PoolConnection) {}
 
     abstract define(text: string): Promise<void>;
     abstract modify(text: string): Promise<SqlModificationResult>;
