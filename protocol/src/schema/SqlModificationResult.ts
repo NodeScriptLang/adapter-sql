@@ -3,7 +3,6 @@ import { Schema } from 'airtight';
 import { FieldInfo, FieldInfoSchema } from './FieldInfo.js';
 
 export interface SqlModificationResult {
-    command: string;
     rows?: Record<string, any>[];
     fieldData?: FieldInfo[];
     affectedRowCount: number;
@@ -12,7 +11,6 @@ export interface SqlModificationResult {
 export const SqlModificationResultSchema = new Schema<SqlModificationResult>({
     type: 'object',
     properties: {
-        command: { type: 'string' },
         rows: {
             type: 'array',
             items: {
