@@ -25,7 +25,7 @@ NodeScript Sql Adapter can be configured with the following environment variable
 
 - **POOL_SIZE** (default: 5) - the maximum number of connections to establish to *each* database the adapter connects to.
 
-- **POOL_TTL_MS** (default: 60_00) - pools created that many millis ago will be recycled (this eliminates connection leaks otherwise occurring with high-throughput scenarios)
+- **POOL_TTL_MS** (default: 60_000) - pools created that many millis ago will be recycled (this eliminates connection leaks otherwise occurring with high-throughput scenarios)
 
 - **CONNECT_TIMEOUT_MS** (default: 10_000) — the adapter will throw an error if the connection cannot be established within specified timeout.
 
