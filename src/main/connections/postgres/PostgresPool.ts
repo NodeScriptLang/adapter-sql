@@ -1,3 +1,4 @@
+import { CounterMetric, metric } from '@nodescript/metrics';
 import pg, { Pool as PoolType } from 'pg';
 
 import { BasePool } from '../BasePool.js';
@@ -7,6 +8,13 @@ const { Pool } = pg;
 
 export class PostgresPool extends BasePool {
     protected pool: PoolType;
+
+    @metric()
+    protected connectionStats = new CounterMetric<{
+        type: 'connect' | 'connectionCreated' | 'connectionClosed' | 'close' | 'fail';
+        vendor: 'postgres';
+    }>('nodescript_sql_adapter_connections', 'Sql adapter connections');
+
     constructor(
         connectionUrl: string,
         poolKey: string,
@@ -36,7 +44,6 @@ export class PostgresPool extends BasePool {
         });
         this.pool.on('acquire', () => {
             this.usedConnections += 1;
-            this.logger.info('Connection count: ', { count: this.usedConnections });
         });
         this.pool.on('release', () => {
             this.usedConnections -= 1;

@@ -8,7 +8,7 @@ import { BaseConnection } from '../BaseConnection.js';
 export class PostgresConnection extends BaseConnection {
     private postgresTypes: Record<string, string>;
     constructor(
-        protected client: PoolClient
+        protected override client: PoolClient
     ) {
         super(client);
         this.postgresTypes = Object.fromEntries(

@@ -7,7 +7,7 @@ import { getMySqlTypeByCode } from './MySqlFieldTypeMap.js';
 
 export class MySqlConnection extends BaseConnection {
     constructor(
-        protected client: PoolConnection
+       protected override client: PoolConnection
     ) {
         super(client);
     }
@@ -27,10 +27,16 @@ export class MySqlConnection extends BaseConnection {
     async query(text: string, params?: any[]): Promise<SqlQueryResult> {
         const [result, resultFields] = await this.execute<RowDataPacket[]>(text, params);
 
-        const fields = resultFields.map((field: any) => ({
-            name: field.name,
-            type: getMySqlTypeByCode(field.columnType),
-        }));
+        const fields = resultFields.map((field: any) => {
+            const type = getMySqlTypeByCode(field.columnType);
+            if (type === 'Unknown') {
+                this.logger.info('Unidentified MySql type code', { code: field.columnType });
+            }
+            return {
+                name: field.name,
+                type
+            };
+        });
 
         return {
             rows: result,
