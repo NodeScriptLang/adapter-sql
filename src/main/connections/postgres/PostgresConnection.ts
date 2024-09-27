@@ -40,13 +40,17 @@ export class PostgresConnection extends BaseConnection {
         };
     }
 
+    async release() {
+        this.client.release();
+    }
+
     private async execute(text: string, params?: any[]) {
         try {
             return await this.client.query(text, params);
         } catch (err) {
             throw new SqlError(err);
         } finally {
-            this.client.release();
+            this.release();
         }
     }
 

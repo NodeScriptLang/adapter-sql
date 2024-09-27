@@ -45,13 +45,17 @@ export class MySqlConnection extends BaseConnection {
         };
     }
 
+    async release() {
+        this.client.release();
+    }
+
     private async execute<T extends QueryResult>(text: string, params?: any[]): Promise<[T, FieldPacket[]]> {
         try {
             return await this.client.execute<T>(text, params);
         } catch (err) {
             throw new SqlError(err);
         } finally {
-            this.client.release();
+            this.release();
         }
     }
 

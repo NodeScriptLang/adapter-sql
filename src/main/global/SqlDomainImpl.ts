@@ -12,7 +12,8 @@ export class SqlDomainImpl implements SqlDomain {
     async connect(req: {
         connectionUrl: string;
     }): Promise<{}> {
-        await this.getConnection(req.connectionUrl);
+        const conn = await this.getConnection(req.connectionUrl);
+        conn.release();
         return {};
     }
 
