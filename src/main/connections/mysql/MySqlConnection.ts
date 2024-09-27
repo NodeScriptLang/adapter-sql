@@ -45,7 +45,7 @@ export class MySqlConnection extends BaseConnection {
         };
     }
 
-    async release() {
+    release() {
         this.client.release();
     }
 

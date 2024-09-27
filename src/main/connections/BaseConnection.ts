@@ -12,5 +12,5 @@ export abstract class BaseConnection {
     abstract define(text: string): Promise<void>;
     abstract modify(text: string): Promise<SqlModificationResult>;
     abstract query(text: string): Promise<SqlQueryResult>;
-    abstract release(): Promise<void>;
+    abstract release(): void;
 }

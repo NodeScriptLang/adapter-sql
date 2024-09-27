@@ -40,7 +40,7 @@ export class PostgresConnection extends BaseConnection {
         };
     }
 
-    async release() {
+    release() {
         this.client.release();
     }
 
