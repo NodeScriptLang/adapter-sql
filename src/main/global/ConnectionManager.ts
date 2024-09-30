@@ -19,6 +19,10 @@ export class ConnectionManager {
     private running = false;
     private sweepPromise: Promise<void> = Promise.resolve();
 
+    get poolCount() {
+        return [...this.poolMap.values()].length;
+    }
+
     async start() {
         if (this.running) {
             return;

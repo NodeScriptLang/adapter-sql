@@ -29,6 +29,10 @@ export abstract class BasePool {
         return Date.now() - this.createdAt;
     }
 
+    get connectionCount() {
+        return this.usedConnections;
+    }
+
     async connect() {
         try {
             const connection = await this.getConnection();
