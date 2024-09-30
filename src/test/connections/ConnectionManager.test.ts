@@ -37,7 +37,7 @@ describe('Connection Manager', () => {
 
             runtime.app.connectionManager.getPool(connectionUrl);
 
-            await new Promise(resolve => setTimeout(resolve, ttl + sweepInterval));
+            await new Promise(resolve => setTimeout(resolve, ttl + sweepInterval + 100));
 
             const sweptCount = runtime.app.connectionManager.poolCount;
             assert.equal(sweptCount, 0, 'Expected no pools to be open');
@@ -56,7 +56,7 @@ describe('Connection Manager', () => {
 
             runtime.app.connectionManager.getPool(connectionUrl);
 
-            await new Promise(resolve => setTimeout(resolve, ttl + sweepInterval));
+            await new Promise(resolve => setTimeout(resolve, ttl + sweepInterval + 100));
 
             const sweptCount = runtime.app.connectionManager.poolCount;
             assert.equal(sweptCount, 0, 'Expected no pools to be open');

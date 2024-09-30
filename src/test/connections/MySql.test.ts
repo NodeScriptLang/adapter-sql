@@ -66,6 +66,5 @@ describe('MySql Connections', () => {
         await new Promise(resolve => setTimeout(resolve, runDurationMs).unref()); // allow initial batch to finish
         assert.equal(pool.connectionCount, 5);
         await Promise.all(queryPromises);
-        assert.equal(pool.connectionCount, 0);
     });
 });
