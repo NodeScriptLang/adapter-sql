@@ -1,0 +1,41 @@
+name: Test
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5011:5432
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+        ports:
+          - 5010:3306
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+    - name: nvm use v18
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    - run: npm ci
+    - run: npm run lint
+    - run: npm run compile
+    - name: npm test
+      env:
+        PGHOST: localhost
+        PGPORT: 5011
+        MYSQL_HOST: localhost
+        MYSQL_PORT: 5010
+      run: npm test
