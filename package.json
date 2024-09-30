@@ -29,7 +29,11 @@
   "pre-commit": [
     "lint"
   ],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/nodescriptlang/adapter-sql.git"
+  },
+  "author": "Nodescript",
   "license": "ISC",
   "devDependencies": {
     "@nodescript/eslint-config": "^1.2.0",
