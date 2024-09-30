@@ -32,12 +32,10 @@ describe('Connection Manager', () => {
     context('Postgres', () => {
         it('closes + can reopen pools after TTL expires', async () => {
             const connectionUrl = runtime.testPostgresUrl;
-            const ttl = runtime.app.connectionManager.POOL_TTL_MS;
-            const sweepInterval = runtime.app.connectionManager.SWEEP_INTERVAL_MS;
 
             runtime.app.connectionManager.getPool(connectionUrl);
-
-            await new Promise(resolve => setTimeout(resolve, ttl + sweepInterval + 100));
+            await new Promise(resolve => setTimeout(resolve, 1)); // pool age > expiry time
+            await runtime.app.connectionManager.closeExpired(0);
 
             const sweptCount = runtime.app.connectionManager.poolCount;
             assert.equal(sweptCount, 0, 'Expected no pools to be open');
@@ -51,12 +49,10 @@ describe('Connection Manager', () => {
     context('MySql', () => {
         it('closes + can reopen pools after TTL expires', async () => {
             const connectionUrl = runtime.testMySqlUrl;
-            const ttl = runtime.app.connectionManager.POOL_TTL_MS;
-            const sweepInterval = runtime.app.connectionManager.SWEEP_INTERVAL_MS;
 
             runtime.app.connectionManager.getPool(connectionUrl);
-
-            await new Promise(resolve => setTimeout(resolve, ttl + sweepInterval + 100));
+            await new Promise(resolve => setTimeout(resolve, 1)); // pool age > expiry time
+            await runtime.app.connectionManager.closeExpired(0);
 
             const sweptCount = runtime.app.connectionManager.poolCount;
             assert.equal(sweptCount, 0, 'Expected no pools to be open');

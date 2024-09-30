@@ -49,6 +49,15 @@ export class ConnectionManager {
         return pool;
     }
 
+    async closeExpired(expiry: number = this.POOL_TTL_MS) {
+        const expiredConnections = [...this.poolMap.values()].filter(_ => _.age > expiry);
+        this.logger.info(`Sweep: closing ${expiredConnections.length} expired pools`);
+        for (const conn of expiredConnections) {
+            this.poolMap.delete(conn.poolKey);
+            await conn.closeGracefully();
+        }
+    }
+
     private selectPool(connectionUrl: string, poolKey: string) {
         if (connectionUrl.startsWith('mysql')) {
             return new MySqlPool(connectionUrl, poolKey, this.POOL_SIZE, this.CONNECT_TIMEOUT_MS);
@@ -63,15 +72,6 @@ export class ConnectionManager {
         const conns = [...this.poolMap.values()];
         this.poolMap.clear();
         await Promise.all(conns.map(_ => _.closeGracefully()));
-    }
-
-    private async closeExpired() {
-        const expiredConnections = [...this.poolMap.values()].filter(_ => _.age > this.POOL_TTL_MS);
-        this.logger.info(`Sweep: closing ${expiredConnections.length} expired pools`);
-        for (const conn of expiredConnections) {
-            this.poolMap.delete(conn.poolKey);
-            await conn.closeGracefully();
-        }
     }
 
     private async sweepLoop() {
