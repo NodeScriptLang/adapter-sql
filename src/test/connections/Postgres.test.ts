@@ -6,20 +6,20 @@ import { runtime } from '../runtime.js';
 describe('Postgres Connections', () => {
     beforeEach(async () => {
         const connectionUrl = runtime.testPostgresUrl;
-        await runtime.Sql.executeDefinition({ connectionUrl,
-            definition: 'DROP TABLE IF EXISTS test;' });
-        await runtime.Sql.executeDefinition({ connectionUrl,
-            definition: 'CREATE TABLE test (id SERIAL PRIMARY KEY, username VARCHAR(50));' });
+        await runtime.Sql.query({ connectionUrl,
+            query: 'DROP TABLE IF EXISTS test;' });
+        await runtime.Sql.query({ connectionUrl,
+            query: 'CREATE TABLE test (id SERIAL PRIMARY KEY, username VARCHAR(50));' });
     });
     afterEach(async () => {
         const connectionUrl = runtime.testPostgresUrl;
-        await runtime.Sql.executeDefinition({ connectionUrl,
-            definition: 'DROP TABLE test;' });
+        await runtime.Sql.query({ connectionUrl,
+            query: 'DROP TABLE test;' });
     });
 
     it('releases connection after use', async () => {
         const connectionUrl = runtime.testPostgresUrl;
-        await runtime.Sql.executeQuery({ connectionUrl, query: 'SELECT * FROM test;', params: [] });
+        await runtime.Sql.query({ connectionUrl, query: 'SELECT * FROM test;', params: [] });
         const pool = runtime.app.connectionManager.getPool(connectionUrl);
         assert.deepEqual(pool.connectionCount, 0);
     });
@@ -27,14 +27,14 @@ describe('Postgres Connections', () => {
     it('releases connection on error', async () => {
         const connectionUrl = runtime.testPostgresUrl;
         try {
-            await runtime.Sql.executeQuery({ connectionUrl, query: 'SELECT * FROM nonexistent;', params: [] });
+            await runtime.Sql.query({ connectionUrl, query: 'SELECT * FROM nonexistent;', params: [] });
         } catch (err) {
             // ignore the error
         }
         const pool = runtime.app.connectionManager.getPool(connectionUrl);
         assert.deepEqual(pool.connectionCount, 0);
 
-        const { result } = await runtime.Sql.executeQuery({ connectionUrl, query: 'SELECT * FROM test;', params: [] });
+        const { result } = await runtime.Sql.query({ connectionUrl, query: 'SELECT * FROM test;', params: [] });
         assert.ok(result);
     });
 
@@ -45,7 +45,7 @@ describe('Postgres Connections', () => {
 
         const queryPromises = [];
         for (let i = 0; i < concurrency; i++) {
-            queryPromises.push(runtime.Sql.executeQuery({
+            queryPromises.push(runtime.Sql.query({
                 connectionUrl,
                 query: `SELECT pg_sleep_for('${runDurationMs} milliseconds'::interval);`,
                 params: []

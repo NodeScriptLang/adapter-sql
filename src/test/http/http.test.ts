@@ -4,7 +4,7 @@ import { runtime } from '../runtime.js';
 
 describe('HTTP', () => {
     it('throws sql errors with psql', async () => {
-        const res = await fetch(runtime.baseUrl + '/Sql/executeQuery', {
+        const res = await fetch(runtime.baseUrl + '/Sql/query', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
@@ -20,7 +20,7 @@ describe('HTTP', () => {
     });
 
     it('throws sql errors with mysql', async () => {
-        const res = await fetch(runtime.baseUrl + '/Sql/executeQuery', {
+        const res = await fetch(runtime.baseUrl + '/Sql/query', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',

@@ -1,7 +1,6 @@
 import { SqlDomain } from '@nodescript/adapter-sql-protocol';
 import { dep } from 'mesh-ioc';
 
-import { SqlModificationResult } from '../../../protocol/src/schema/SqlModificationResult.js';
 import { SqlQueryResult } from '../../../protocol/src/schema/SqlQueryResult.js';
 import { ConnectionManager } from './ConnectionManager.js';
 
@@ -17,29 +16,10 @@ export class SqlDomainImpl implements SqlDomain {
         return {};
     }
 
-    async executeDefinition(req: {
-        connectionUrl: string;
-        definition: string;
-    }): Promise<{}> {
-        const connection = await this.getConnection(req.connectionUrl);
-        await connection.define(req.definition);
-        return {};
-    }
-
-    async executeModification(req: {
-        connectionUrl: string;
-        modification: string;
-        params: any[];
-    }): Promise<{result: SqlModificationResult}> {
-        const connection = await this.getConnection(req.connectionUrl);
-        const result = await connection.modify(req.modification, req.params);
-        return { result };
-    }
-
-    async executeQuery(req: {
+    async query(req: {
         connectionUrl: string;
         query: string;
-        params: any[];
+        params?: any[];
     }): Promise<{result: SqlQueryResult}> {
         const connection = await this.getConnection(req.connectionUrl);
         const result = await connection.query(req.query, req.params);

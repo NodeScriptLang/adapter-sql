@@ -1,7 +1,6 @@
 import { DomainDef } from '@nodescript/protocomm';
 
-import { SqlModificationResult, SqlModificationResultSchema } from '../schema/SqlModificationResult.js';
-import { SqlQueryResult, SqlQueryResultSchema } from '../schema/SqlQueryResult.js';
+import { SqlQueryResultSchema } from '../schema/SqlQueryResult.js';
 
 export interface SqlDomain {
 
@@ -9,22 +8,12 @@ export interface SqlDomain {
         connectionUrl: string;
     }): Promise<{}>;
 
-    executeDefinition(req: {
-        connectionUrl: string;
-        definition: string;
-    }): Promise<{}>;
-
-    executeModification(req: {
-        connectionUrl: string;
-        modification: string;
-        params: any[];
-    }): Promise<{ result: SqlModificationResult }>;
-
-    executeQuery(req: {
+    query(req: {
         connectionUrl: string;
         query: string;
-        params: any[];
-    }): Promise<{ result: SqlQueryResult }>;
+        params?: any[];
+    }): Promise<{}>;
+
 }
 
 export const SqlDomain: DomainDef<SqlDomain> = {
@@ -37,29 +26,16 @@ export const SqlDomain: DomainDef<SqlDomain> = {
             },
             returns: {},
         },
-        executeDefinition: {
-            type: 'command',
-            params: {
-                connectionUrl: { type: 'string' },
-                definition: { type: 'string' },
-            },
-            returns: {},
-        },
-        executeModification: {
-            type: 'command',
-            params: {
-                connectionUrl: { type: 'string' },
-                modification: { type: 'string' },
-                params: { type: 'array', items: { type: 'any' } }
-            },
-            returns: { result: SqlModificationResultSchema.schema }
-        },
-        executeQuery: {
+        query: {
             type: 'command',
             params: {
                 connectionUrl: { type: 'string' },
                 query: { type: 'string' },
-                params: { type: 'array', items: { type: 'any' } },
+                params: {
+                    type: 'array',
+                    items: { type: 'any' },
+                    optional: true
+                },
             },
             returns: { result: SqlQueryResultSchema.schema }
         }
