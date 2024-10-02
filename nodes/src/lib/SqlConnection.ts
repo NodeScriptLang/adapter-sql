@@ -1,4 +1,4 @@
-import { SqlProtocol, sqlProtocol } from '@nodescript/adapter-Sql-protocol';
+import { SqlProtocol, sqlProtocol } from '@nodescript/adapter-sql-protocol';
 import { InvalidTypeError } from '@nodescript/core/util';
 import { createHttpClient } from '@nodescript/protocomm';
 
