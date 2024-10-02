@@ -1,6 +1,6 @@
 import { DomainDef } from '@nodescript/protocomm';
 
-import { SqlQueryResultSchema } from '../schema/SqlQueryResult.js';
+import { SqlQueryResult, SqlQueryResultSchema } from '../schema/SqlQueryResult.js';
 
 export interface SqlDomain {
 
@@ -12,7 +12,7 @@ export interface SqlDomain {
         connectionUrl: string;
         query: string;
         params?: any[];
-    }): Promise<{}>;
+    }): Promise<{result: SqlQueryResult}>;
 
 }
 
