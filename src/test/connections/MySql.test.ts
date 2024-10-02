@@ -6,26 +6,26 @@ import { runtime } from '../runtime.js';
 describe('MySql Connections', () => {
     beforeEach(async () => {
         const connectionUrl = runtime.testMySqlUrl;
-        await runtime.Sql.executeDefinition({
+        await runtime.Sql.query({
             connectionUrl,
-            definition: 'DROP TABLE IF EXISTS test;'
+            query: 'DROP TABLE IF EXISTS test;'
         });
-        await runtime.Sql.executeDefinition({
+        await runtime.Sql.query({
             connectionUrl,
-            definition: 'CREATE TABLE test (id SERIAL PRIMARY KEY, username VARCHAR(50));'
+            query: 'CREATE TABLE test (id SERIAL PRIMARY KEY, username VARCHAR(50));'
         });
     });
     afterEach(async () => {
         const connectionUrl = runtime.testMySqlUrl;
-        await runtime.Sql.executeDefinition({
+        await runtime.Sql.query({
             connectionUrl,
-            definition: 'DROP TABLE test;'
+            query: 'DROP TABLE test;'
         });
     });
 
     it('releases connection after use', async () => {
         const connectionUrl = runtime.testMySqlUrl;
-        await runtime.Sql.executeQuery({ connectionUrl, query: 'SELECT * FROM test;', params: [] });
+        await runtime.Sql.query({ connectionUrl, query: 'SELECT * FROM test;', params: [] });
         const pool = runtime.app.connectionManager.getPool(connectionUrl);
         assert.deepEqual(pool.connectionCount, 0);
     });
@@ -33,14 +33,14 @@ describe('MySql Connections', () => {
     it('releases connection on error', async () => {
         const connectionUrl = runtime.testMySqlUrl;
         try {
-            await runtime.Sql.executeQuery({ connectionUrl, query: 'SELECT * FROM nonexistent;', params: [] });
+            await runtime.Sql.query({ connectionUrl, query: 'SELECT * FROM nonexistent;', params: [] });
         } catch (err) {
             // ignore the error
         }
         const pool = runtime.app.connectionManager.getPool(connectionUrl);
         assert.deepEqual(pool.connectionCount, 0);
 
-        const { result } = await runtime.Sql.executeQuery({ connectionUrl, query: 'SELECT * FROM test;', params: [] });
+        const { result } = await runtime.Sql.query({ connectionUrl, query: 'SELECT * FROM test;', params: [] });
         assert.ok(result);
     });
 
@@ -51,7 +51,7 @@ describe('MySql Connections', () => {
 
         const queryPromises = [];
         for (let i = 0; i < concurrency; i++) {
-            queryPromises.push(runtime.Sql.executeQuery({
+            queryPromises.push(runtime.Sql.query({
                 connectionUrl,
                 query: `SELECT SLEEP(${runDurationMs / 1000});`,
                 params: []
