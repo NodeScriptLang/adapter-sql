@@ -14,7 +14,7 @@ export const module: ModuleDefinition<P, R> = {
     version: '0.0.1',
     moduleName: 'SQL / Execute Query',
     description: 'Executes a query on a SQL Database',
-    keywords: ['sql', 'database', 'select', 'insert', 'create', 'update', 'delete', 'alter', 'table', 'query'],
+    keywords: ['database'],
     params: {
         connection: {
             schema: {

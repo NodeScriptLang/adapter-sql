@@ -16,7 +16,7 @@ export const module: ModuleDefinition<BulkInsertParams, R> = {
     version: '0.0.1',
     moduleName: 'SQL / Execute Bulk Insert',
     description: 'Takes an array of objects representing row data and executes a SQL INSERT parameterized query.',
-    keywords: ['sql', 'database', 'insert', 'bulk', 'query'],
+    keywords: ['database', 'query'],
     params: {
         connection: {
             schema: {
