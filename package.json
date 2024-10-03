@@ -6,7 +6,8 @@
   "sideEffects": false,
   "private": true,
   "workspaces": [
-    "protocol"
+    "protocol",
+    "nodes"
   ],
   "scripts": {
     "clean": "run-p clean:*",
@@ -24,7 +25,8 @@
     "version:workspaces": "npm exec --workspaces -- npm version $npm_package_version && git add .",
     "postversion": "run-s postversion:*",
     "postversion:push": "git push --tags origin main",
-    "postversion:publish-protocol": "cd protocol && npm publish --access=public"
+    "postversion:publish-protocol": "cd protocol && npm publish --access=public",
+    "publish:nodes": "cd nodes && nodescript publish"
   },
   "pre-commit": [
     "lint"
@@ -36,6 +38,7 @@
   "author": "Nodescript",
   "license": "ISC",
   "devDependencies": {
+    "@nodescript/cli": "^1.8.0",
     "@nodescript/eslint-config": "^1.2.0",
     "@types/mocha": "^10.0.8",
     "@types/node": "^22.5.5",
@@ -47,7 +50,7 @@
     "typescript": "^5.6.2"
   },
   "dependencies": {
-    "@nodescript/adapter-sql-protocol": "^0.0.1",
+    "@nodescript/adapter-sql-protocol": "^1.0.0",
     "@nodescript/errors": "^1.2.0",
     "@nodescript/http-server": "^2.6.0",
     "@nodescript/logger": "^2.0.6",
