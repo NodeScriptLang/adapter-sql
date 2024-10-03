@@ -34,7 +34,7 @@ export const module: ModuleDefinition<P, R> = {
                 type: 'array',
                 items: { type: 'any' },
                 optional: true,
-                description: 'Query parameters for prepared statements. Optional'
+                description: 'Array of values for parameterized queries. Optional'
             }
         }
     },
