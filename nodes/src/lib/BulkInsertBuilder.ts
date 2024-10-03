@@ -1,27 +1,16 @@
-export type BulkInsertParams = {
-    vendor: 'PostgreSQL' | 'MySQL';
-    tableName: string;
-    rowData: Record<string, any>[];
-    returning?: string;
-};
+import { BulkInsertParams } from '../nodes/Sql.ExecuteBulkInsert.js';
 
-export type BulkInsertResult = {
-    query: string;
-    params: any[];
-};
 
 export class BulkInsertBuilder {
-    private vendor: 'PostgreSQL' | 'MySQL';
+    private connectionUrl: string;
     private rowData: Record<string, any>[];
     private tableName: string;
-    private returning: string;
     private queryParams: any[] = [];
 
     constructor(params: BulkInsertParams) {
-        this.vendor = params.vendor;
+        this.connectionUrl = params.connection.connectionUrl;
         this.rowData = params.rowData;
         this.tableName = params.tableName;
-        this.returning = params.returning ?? '';
     }
 
     buildQuery() {
@@ -35,35 +24,20 @@ export class BulkInsertBuilder {
 
         query += valuePlaceholders.join(', ');
 
-        if (this.vendor === 'PostgreSQL') {
-            query += this.formatReturningClause();
-        }
-
         return { query: query + ';', params: this.queryParams };
     }
 
     private extractParam(value: any): string {
         this.queryParams.push(value);
-        let suffix = '';
-        if (typeof value === 'number' && this.vendor === 'PostgreSQL') {
-            suffix = '::integer';
-        }
-        return this.getVendorPlaceholder(this.queryParams.length) + suffix;
+        return this.getVendorPlaceholder(this.queryParams.length);
     }
 
     private getVendorPlaceholder(paramIndex: number): string {
-        if (this.vendor === 'PostgreSQL') {
+        if (this.connectionUrl.startsWith('postgres')) {
             return `$${paramIndex}`;
         }
-        if (this.vendor === 'MySQL') {
+        if (this.connectionUrl.startsWith('mysql')) {
             return '?';
-        }
-        return '';
-    }
-
-    private formatReturningClause(): string {
-        if (this.returning.trim() !== '') {
-            return ` RETURNING ${this.returning.trimEnd().replace(/;$/, '')}`;
         }
         return '';
     }

@@ -1,13 +1,14 @@
+import { SqlQueryResult } from '@nodescript/adapter-sql-protocol';
 import { ModuleCompute, ModuleDefinition } from '@nodescript/core/types';
 
-import { requireConnection } from '../lib/SqlConnection.js';
+import { requireConnection, SqlConnection } from '../lib/SqlConnection.js';
 
 type P = {
-    connection: unknown;
+    connection: SqlConnection;
     query: string;
     params?: any[];
 };
-type R = Promise<unknown>;
+type R = Promise<SqlQueryResult>;
 
 export const module: ModuleDefinition<P, R> = {
     version: '0.0.1',
@@ -47,7 +48,7 @@ export const module: ModuleDefinition<P, R> = {
 
 export const compute: ModuleCompute<P, R> = async params => {
     const connection = requireConnection(params.connection);
-    const { result } = await connection.Sql.executeQuery({
+    const { result } = await connection.Sql.query({
         connectionUrl: connection.connectionUrl,
         query: params.query,
         params: params.params ?? [],

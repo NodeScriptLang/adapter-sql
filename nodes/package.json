@@ -1,31 +1,31 @@
 {
-    "name": "@nodescript/adapter-sql-nodes",
-    "version": "1.0.0",
-    "type": "module",
-    "description": "SQL Connector Nodes",
-    "files": [
-      "out/lib/**/*",
-      "out/nodes/**/*"
-    ],
-    "scripts": {
-      "clean": "rm -rf out *.tsbuildinfo"
-    },
-    "engines": {
-      "node": ">=18"
-    },
-    "pre-commit": [
-      "lint"
-    ],
-    "dependencies": {
-      "@nodescript/adapter-sql-protocol": "^1.0.0",
-      "@nodescript/core": "^7.16.2",
-      "@nodescript/protocomm": "^1.1.0",
-      "airtight": "^5.7.2"
-    },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/NodeScriptLang/adapter-sql.git"
-    },
-    "author": "Nodescript",
-    "license": "ISC"
-  }
+  "name": "@nodescript/adapter-sql-nodes",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "SQL Connector Nodes",
+  "files": [
+    "out/lib/**/*",
+    "out/nodes/**/*"
+  ],
+  "scripts": {
+    "clean": "rm -rf out *.tsbuildinfo"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "pre-commit": [
+    "lint"
+  ],
+  "dependencies": {
+    "@nodescript/adapter-sql-protocol": "^1.0.0",
+    "@nodescript/core": "^7.16.2",
+    "@nodescript/protocomm": "^1.1.0",
+    "airtight": "^5.7.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NodeScriptLang/adapter-sql.git"
+  },
+  "author": "Nodescript",
+  "license": "ISC"
+}

@@ -1,6 +1,7 @@
 import assert from 'assert';
 
 import { BulkInsertBuilder } from '../../lib/BulkInsertBuilder.js';
+import { SqlConnection } from '../../lib/SqlConnection.js';
 
 describe('InsertBuilder', () => {
 
@@ -8,9 +9,8 @@ describe('InsertBuilder', () => {
 
         it('returns query in expected format', () => {
             const builder = new BulkInsertBuilder({
-                vendor: 'PostgreSQL',
+                connection: new SqlConnection('postgres://test', 'http://localhost:1234'),
                 tableName: 'users',
-                returning: '',
                 rowData: [{ id: 'test', other: 'data' }, { id: 'test2', other: 'data2' }]
             });
             const result = builder.buildQuery();
@@ -20,25 +20,13 @@ describe('InsertBuilder', () => {
 
         it('correct number + order of params', () => {
             const builder = new BulkInsertBuilder({
-                vendor: 'PostgreSQL',
+                connection: new SqlConnection('postgres://test', 'http://localhost:1234'),
                 tableName: 'users',
-                returning: '',
                 rowData: [{ id: 'test', other: 'data' }, { id: 'test2', other: 'data2' }]
             });
             const result = builder.buildQuery();
             assert.equal(result.params.length, 4);
             assert.deepEqual(result.params, ['test', 'data', 'test2', 'data2']);
-        });
-
-        it('handles returning operations', () => {
-            const builder = new BulkInsertBuilder({
-                vendor: 'PostgreSQL',
-                tableName: 'users',
-                returning: '*',
-                rowData: [{ id: 'test', other: 'data' }]
-            });
-            const result = builder.buildQuery();
-            assert.ok(result.query.endsWith('RETURNING *;'));
         });
     });
 
@@ -46,9 +34,8 @@ describe('InsertBuilder', () => {
 
         it('returns query in expected format', () => {
             const builder = new BulkInsertBuilder({
-                vendor: 'MySQL',
+                connection: new SqlConnection('mysql://test', 'http://localhost:1234'),
                 tableName: 'users',
-                returning: '',
                 rowData: [{ id: 'test', other: 'data' }]
             });
             const result = builder.buildQuery();
