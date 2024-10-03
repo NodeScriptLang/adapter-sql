@@ -38,7 +38,7 @@
   "author": "Nodescript",
   "license": "ISC",
   "devDependencies": {
-    "@nodescript/cli": "^1.2.0",
+    "@nodescript/cli": "^1.8.0",
     "@nodescript/eslint-config": "^1.2.0",
     "@types/mocha": "^10.0.8",
     "@types/node": "^22.5.5",

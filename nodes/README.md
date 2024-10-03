@@ -31,4 +31,4 @@ Install with `npm i`, compile with  `npm run compile`
 
 6. Open (or reload) any graph locally and confirm that the adapter-sql nodes are now available.
 
-**NOTE** - To actually use the nodes in nodescript, you will also need to be running [adapter-sql](https://github.com/NodeScriptLang/adapter-sql) or have a link to a deployed instance of it. Refer to the documentation in that repo to get it set up.
+**NOTE** - To actually use the nodes in nodescript, you will also need to be running the [adapter-sql](../README.md) server locally or have a link to a deployed instance of it. Refer to the linked documentation to get it set up.
