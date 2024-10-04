@@ -2,6 +2,8 @@
 
 Facilitates SQL nodes in [NodeScript](https://nodescript.dev).
 
+NodeScript SQL Adapter is currently available as a docker image at `ghcr.io/nodescriptlang/adapter-sql`.
+
 ## Development
 
 ### Requirements
