@@ -39,7 +39,6 @@ export const module: ModuleDefinition<P, R> = {
 export const compute: ModuleCompute<P, R> = async params => {
     const connectionUrl = params.connectionUrl;
     const connection = new SqlConnection(connectionUrl, params.adapterUrl);
-    await connection.Sql.connect({ connectionUrl });
     return connection;
 };
 

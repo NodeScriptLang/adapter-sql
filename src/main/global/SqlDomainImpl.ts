@@ -8,14 +8,6 @@ export class SqlDomainImpl implements SqlDomain {
 
     @dep() private connectionManager!: ConnectionManager;
 
-    async connect(req: {
-        connectionUrl: string;
-    }): Promise<{}> {
-        const conn = await this.getConnection(req.connectionUrl);
-        conn.release();
-        return {};
-    }
-
     async query(req: {
         connectionUrl: string;
         query: string;
