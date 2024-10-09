@@ -4,10 +4,6 @@ import { SqlQueryResult, SqlQueryResultSchema } from '../schema/SqlQueryResult.j
 
 export interface SqlDomain {
 
-    connect(req: {
-        connectionUrl: string;
-    }): Promise<{}>;
-
     query(req: {
         connectionUrl: string;
         query: string;
@@ -19,13 +15,6 @@ export interface SqlDomain {
 export const SqlDomain: DomainDef<SqlDomain> = {
     name: 'Sql',
     methods: {
-        connect: {
-            type: 'command',
-            params: {
-                connectionUrl: { type: 'string' },
-            },
-            returns: {},
-        },
         query: {
             type: 'command',
             params: {
