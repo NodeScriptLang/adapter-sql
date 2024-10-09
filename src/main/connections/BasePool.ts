@@ -37,7 +37,7 @@ export abstract class BasePool {
         try {
             const connection = await this.getConnection();
             this.connectionStats.incr(1, { type: 'connect' });
-            this.logger.info('MySQL client connected', { poolKey: this.poolKey });
+            this.logger.info('Client connected', { poolKey: this.poolKey });
             return connection;
         } catch (error) {
             this.connectionStats.incr(1, { type: 'fail' });
