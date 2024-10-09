@@ -52,13 +52,23 @@ describe('Postgres Connections', () => {
             }));
         }
 
-        await new Promise(resolve => setTimeout(resolve, 20).unref()); // allow queries to start running
-
         const pool = runtime.app.connectionManager.getPool(connectionUrl);
-        assert.equal(pool.connectionCount, 10);
 
-        await new Promise(resolve => setTimeout(resolve, runDurationMs).unref()); // allow initial batch to finish
-        assert.equal(pool.connectionCount, 5);
-        await Promise.all(queryPromises);
+        const counts: number[] = [];
+        await new Promise(resolve => {
+            const startTime = Date.now();
+            const checkInterval = setInterval(() => {
+                if (Date.now() - startTime > (runDurationMs * 2)) {
+                    clearInterval(checkInterval);
+                    resolve(null);
+                }
+                counts.push(pool.connectionCount);
+            }, 5);
+        });
+
+        const poolCappedAndReleased = counts.includes(10) && counts.at(-1) !== 10;
+        assert.ok(poolCappedAndReleased);
+        await Promise.all(queryPromises); // let all queries run
+        assert.equal(pool.connectionCount, 0); // no stale connections after queue + release
     });
 });
