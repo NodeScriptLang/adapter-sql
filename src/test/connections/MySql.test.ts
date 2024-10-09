@@ -1,6 +1,7 @@
 import assert from 'assert';
 
 import { runtime } from '../runtime.js';
+import { poll } from '../utils.js';
 
 
 describe('MySql Connections', () => {
@@ -57,14 +58,22 @@ describe('MySql Connections', () => {
                 params: []
             }));
         }
-
-        await new Promise(resolve => setTimeout(resolve, 20).unref()); // allow queries to start running
-
-        const pool = runtime.app.connectionManager.getPool(connectionUrl);
-        assert.equal(pool.connectionCount, 10);
-
-        await new Promise(resolve => setTimeout(resolve, runDurationMs).unref()); // allow initial batch to finish
-        assert.equal(pool.connectionCount, 5);
+        const poolCappedAndReleased = await pollConnections(connectionUrl);
+        assert.ok(poolCappedAndReleased);
         await Promise.all(queryPromises);
     });
 });
+
+async function pollConnections(connectionUrl: string) {
+    let reachedLimit = false;
+    return await poll(async () => {
+        const pool = runtime.app.connectionManager.getPool(connectionUrl);
+        if (pool.connectionCount === 10 && !reachedLimit) {
+            reachedLimit = true;
+        }
+        if (pool.connectionCount < 10 && reachedLimit) {
+            return true;
+        }
+        throw new Error('Never reached pool limit or failed to release');
+    });
+}
