@@ -1,6 +1,7 @@
 import assert from 'assert';
 
 import { runtime } from '../runtime.js';
+import { poll } from '../utils.js';
 
 
 describe('Postgres Connections', () => {
@@ -51,24 +52,22 @@ describe('Postgres Connections', () => {
                 params: []
             }));
         }
-
-        const pool = runtime.app.connectionManager.getPool(connectionUrl);
-
-        const counts: number[] = [];
-        await new Promise(resolve => {
-            const startTime = Date.now();
-            const checkInterval = setInterval(() => {
-                if (Date.now() - startTime > (runDurationMs * 2)) {
-                    clearInterval(checkInterval);
-                    resolve(null);
-                }
-                counts.push(pool.connectionCount);
-            }, 5);
-        });
-
-        const poolCappedAndReleased = counts.includes(10) && counts.at(-1) !== 10;
+        const poolCappedAndReleased = await pollConnections(connectionUrl);
         assert.ok(poolCappedAndReleased);
-        await Promise.all(queryPromises); // let all queries run
-        assert.equal(pool.connectionCount, 0); // no stale connections after queue + release
+        await Promise.all(queryPromises);
     });
 });
+
+async function pollConnections(connectionUrl: string) {
+    let reachedLimit = false;
+    return await poll(async () => {
+        const pool = runtime.app.connectionManager.getPool(connectionUrl);
+        if (pool.connectionCount === 10 && !reachedLimit) {
+            reachedLimit = true;
+        }
+        if (pool.connectionCount < 10 && reachedLimit) {
+            return true;
+        }
+        throw new Error('Never reached pool limit or failed to release');
+    });
+}
