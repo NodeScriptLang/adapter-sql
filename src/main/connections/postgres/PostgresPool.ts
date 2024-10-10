@@ -1,4 +1,3 @@
-import { CounterMetric, metric } from '@nodescript/metrics';
 import pg, { Pool as PoolType } from 'pg';
 
 import { BasePool } from '../BasePool.js';
@@ -9,17 +8,11 @@ const { Pool } = pg;
 export class PostgresPool extends BasePool {
     protected pool: PoolType;
 
-    @metric()
-    protected connectionStats = new CounterMetric<{
-        type: 'connect' | 'connectionCreated' | 'connectionClosed' | 'close' | 'fail';
-        vendor: 'postgres';
-    }>('nodescript_sql_adapter_connections', 'Sql adapter connections');
-
     constructor(
         connectionUrl: string,
         poolKey: string,
         maxConnections: number,
-        connectionTimeout: number,
+        connectionTimeout: number
     ) {
         super(connectionUrl, poolKey, maxConnections, connectionTimeout);
         this.pool = new Pool({
@@ -33,13 +26,15 @@ export class PostgresPool extends BasePool {
     protected setupEventListeners() {
         this.pool.on('connect', () => {
             this.logger.info('Connection created', { poolKey: this.poolKey });
-            this.connectionStats.incr(1, {
-                type: 'connectionCreated'
+            this.metrics.connectionStats.incr(1, {
+                type: 'connectionCreated',
+                vendor: 'postgres'
             });
         });
         this.pool.on('remove', async () => {
-            this.connectionStats.incr(1, {
+            this.metrics.connectionStats.incr(1, {
                 type: 'connectionClosed',
+                vendor: 'postgres'
             });
         });
         this.pool.on('acquire', () => {

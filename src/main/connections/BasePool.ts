@@ -1,18 +1,18 @@
 import { Logger } from '@nodescript/logger';
-import { CounterMetric } from '@nodescript/metrics';
 import { dep } from 'mesh-ioc';
 import { Event } from 'nanoevent';
 
+import { Metrics } from '../global/Metrics.js';
 import { MySqlConnection } from './mysql/MySqlConnection.js';
 import { PostgresConnection } from './postgres/PostgresConnection.js';
 
 export abstract class BasePool {
     @dep() logger!: Logger;
+    @dep() metrics!: Metrics;
 
     becameIdle = new Event<void>();
     protected createdAt = Date.now();
     protected usedConnections = 0;
-    protected abstract connectionStats: CounterMetric;
 
     constructor(
         readonly connectionUrl: string,
@@ -36,11 +36,11 @@ export abstract class BasePool {
     async connect() {
         try {
             const connection = await this.getConnection();
-            this.connectionStats.incr(1, { type: 'connect' });
+            this.metrics.connectionStats.incr(1, { type: 'connect' });
             this.logger.info('Client connected', { poolKey: this.poolKey });
             return connection;
         } catch (error) {
-            this.connectionStats.incr(1, { type: 'fail' });
+            this.metrics.connectionStats.incr(1, { type: 'fail' });
             throw error;
         }
     }
@@ -57,7 +57,7 @@ export abstract class BasePool {
         try {
             await this.closePool();
             this.logger.info(`Closed ${this.constructor.name}`, { poolKey: this.poolKey });
-            this.connectionStats.incr(1, { type: 'close' });
+            this.metrics.connectionStats.incr(1, { type: 'close' });
         } catch (error) {
             this.logger.error(`Failed to close ${this.constructor.name}`, {
                 error,
