@@ -11,10 +11,9 @@ export class MySqlPool extends BasePool {
         poolKey: string,
         connectionLimit: number,
         connectTimeout: number,
-        connectionStats: any
 
     ) {
-        super(connectionUrl, poolKey, connectionLimit, connectTimeout, connectionStats);
+        super(connectionUrl, poolKey, connectionLimit, connectTimeout);
         this.pool = createPool({
             uri: connectionUrl,
             connectionLimit,
@@ -28,7 +27,7 @@ export class MySqlPool extends BasePool {
     protected setupEventListeners() {
         this.pool.on('connection', () => {
             this.logger.info('Connection created', { poolKey: this.poolKey });
-            this.connectionStats.incr(1, {
+            this.metrics.connectionStats.incr(1, {
                 type: 'connectionCreated',
                 vendor: 'mysql'
             });

@@ -7,6 +7,7 @@ import { dep, Mesh } from 'mesh-ioc';
 import { AuthHandler } from './global/AuthHandler.js';
 import { ConnectionManager } from './global/ConnectionManager.js';
 import { MainHttpServer } from './global/MainHttpServer.js';
+import { Metrics } from './global/Metrics.js';
 import { SqlDomainImpl } from './global/SqlDomainImpl.js';
 import { SqlProtocolHandler } from './global/SqlProtocolHandler.js';
 import { SqlProtocolImpl } from './global/SqlProtocolImpl.js';
@@ -21,6 +22,7 @@ export class App extends BaseApp {
         this.mesh.service(AuthHandler);
         this.mesh.service(HttpServer, MainHttpServer);
         this.mesh.service(ConnectionManager);
+        this.mesh.service(Metrics);
         this.mesh.service(SqlDomainImpl);
         this.mesh.service(SqlProtocolHandler);
         this.mesh.service(SqlProtocolImpl);
