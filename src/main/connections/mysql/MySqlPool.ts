@@ -1,4 +1,3 @@
-import { CounterMetric, metric } from '@nodescript/metrics';
 import { createPool, Pool } from 'mysql2/promise';
 
 import { BasePool } from '../BasePool.js';
@@ -7,19 +6,15 @@ import { MySqlConnection } from './MySqlConnection.js';
 export class MySqlPool extends BasePool {
     protected pool: Pool;
 
-    @metric()
-    protected connectionStats = new CounterMetric<{
-        type: 'connect' | 'connectionCreated' | 'close' | 'fail';
-        vendor: 'mysql';
-    }>('nodescript_sql_adapter_connections', 'Sql adapter connections');
-
     constructor(
         connectionUrl: string,
         poolKey: string,
         connectionLimit: number,
-        connectTimeout: number
+        connectTimeout: number,
+        connectionStats: any
+
     ) {
-        super(connectionUrl, poolKey, connectionLimit, connectTimeout);
+        super(connectionUrl, poolKey, connectionLimit, connectTimeout, connectionStats);
         this.pool = createPool({
             uri: connectionUrl,
             connectionLimit,
@@ -34,7 +29,8 @@ export class MySqlPool extends BasePool {
         this.pool.on('connection', () => {
             this.logger.info('Connection created', { poolKey: this.poolKey });
             this.connectionStats.incr(1, {
-                type: 'connectionCreated'
+                type: 'connectionCreated',
+                vendor: 'mysql'
             });
         });
         this.pool.on('acquire', () => {

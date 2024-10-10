@@ -12,13 +12,13 @@ export abstract class BasePool {
     becameIdle = new Event<void>();
     protected createdAt = Date.now();
     protected usedConnections = 0;
-    protected abstract connectionStats: CounterMetric;
 
     constructor(
         readonly connectionUrl: string,
         readonly poolKey: string,
         readonly maxConnections: number,
-        readonly connectionTimeout: number
+        readonly connectionTimeout: number,
+        readonly connectionStats: CounterMetric
     ) {}
 
     protected abstract setupEventListeners(): void;

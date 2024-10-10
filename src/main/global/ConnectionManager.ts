@@ -1,4 +1,5 @@
 import { Logger } from '@nodescript/logger';
+import { CounterMetric, metric } from '@nodescript/metrics';
 import { config } from 'mesh-config';
 import { dep, Mesh } from 'mesh-ioc';
 
@@ -14,6 +15,12 @@ export class ConnectionManager {
 
     @dep() private mesh!: Mesh;
     @dep() private logger!: Logger;
+
+    @metric()
+    protected connectionStats: CounterMetric = new CounterMetric<{
+        type: 'connect' | 'connectionCreated' | 'connectionClosed' | 'close' | 'fail';
+        vendor: 'mysql' | 'postgres';
+    }>('nodescript_sql_adapter_connections', 'Sql adapter connections');
 
     private poolMap = new Map<string, PostgresPool | MySqlPool>();
     private running = false;
@@ -60,10 +67,10 @@ export class ConnectionManager {
 
     private selectPool(connectionUrl: string, poolKey: string) {
         if (connectionUrl.startsWith('mysql')) {
-            return new MySqlPool(connectionUrl, poolKey, this.POOL_SIZE, this.CONNECT_TIMEOUT_MS);
+            return new MySqlPool(connectionUrl, poolKey, this.POOL_SIZE, this.CONNECT_TIMEOUT_MS, this.connectionStats);
         }
         if (connectionUrl.startsWith('postgres')) {
-            return new PostgresPool(connectionUrl, poolKey, this.POOL_SIZE, this.CONNECT_TIMEOUT_MS);
+            return new PostgresPool(connectionUrl, poolKey, this.POOL_SIZE, this.CONNECT_TIMEOUT_MS, this.connectionStats);
         }
         throw new Error('Invalid connection string');
     }
