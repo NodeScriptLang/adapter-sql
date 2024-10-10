@@ -12,7 +12,7 @@ export class PostgresPool extends BasePool {
         connectionUrl: string,
         poolKey: string,
         maxConnections: number,
-        connectionTimeout: number,
+        connectionTimeout: number
     ) {
         super(connectionUrl, poolKey, maxConnections, connectionTimeout);
         this.pool = new Pool({

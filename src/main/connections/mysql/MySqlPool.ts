@@ -10,8 +10,7 @@ export class MySqlPool extends BasePool {
         connectionUrl: string,
         poolKey: string,
         connectionLimit: number,
-        connectTimeout: number,
-
+        connectTimeout: number
     ) {
         super(connectionUrl, poolKey, connectionLimit, connectTimeout);
         this.pool = createPool({

@@ -18,7 +18,7 @@ export abstract class BasePool {
         readonly connectionUrl: string,
         readonly poolKey: string,
         readonly maxConnections: number,
-        readonly connectionTimeout: number,
+        readonly connectionTimeout: number
     ) {}
 
     protected abstract setupEventListeners(): void;
