@@ -54,7 +54,7 @@ NodeScript SQL Adapter exposes the following Prometheus metrics on `/metrics` en
 
 ## Usage
 
-1. Ensure your adapter and database are deployed. Refer to the [Readme](./README.md) for guidance.
+1. Ensure your adapter and database are deployed.
 2. Login to [Nodescript](https://nodescript.dev/login)
 3. Either open an existing graph in your chosen workspace, or create a new one.
 
