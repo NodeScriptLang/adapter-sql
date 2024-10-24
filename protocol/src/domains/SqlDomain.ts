@@ -12,7 +12,7 @@ export interface SqlDomain {
         connectionUrl: string;
         query: string;
         params?: any[];
-    }): Promise<{result: SqlQueryResult}>;
+    }): Promise<{ result: SqlQueryResult }>;
 
 }
 

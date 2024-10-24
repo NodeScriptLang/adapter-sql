@@ -20,7 +20,7 @@ export class SqlDomainImpl implements SqlDomain {
         connectionUrl: string;
         query: string;
         params?: any[];
-    }): Promise<{result: SqlQueryResult}> {
+    }): Promise<{ result: SqlQueryResult }> {
         const connection = await this.getConnection(req.connectionUrl);
         const result = await connection.query(req.query, req.params);
         return { result };
@@ -31,4 +31,5 @@ export class SqlDomainImpl implements SqlDomain {
         const connection = await pool.connect();
         return connection;
     }
+
 }

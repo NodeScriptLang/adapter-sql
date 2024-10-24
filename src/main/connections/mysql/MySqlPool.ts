@@ -5,6 +5,7 @@ import { BasePool } from '../BasePool.js';
 import { MySqlConnection } from './MySqlConnection.js';
 
 export class MySqlPool extends BasePool {
+
     protected pool: Pool;
 
     @metric()
@@ -48,7 +49,6 @@ export class MySqlPool extends BasePool {
         });
     }
 
-
     async getConnection() {
         const client = await this.pool.getConnection();
         return new MySqlConnection(client);
@@ -57,4 +57,5 @@ export class MySqlPool extends BasePool {
     async closePool() {
         await this.pool.end();
     }
+
 }

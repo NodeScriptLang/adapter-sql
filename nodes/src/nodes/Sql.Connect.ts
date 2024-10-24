@@ -2,10 +2,10 @@ import { ModuleCompute, ModuleDefinition } from '@nodescript/core/types';
 
 import { SqlConnection } from '../lib/SqlConnection.js';
 
-type P = {
+interface P {
     adapterUrl: string;
     connectionUrl: string;
-};
+}
 type R = Promise<unknown>;
 
 export const module: ModuleDefinition<P, R> = {
@@ -42,4 +42,3 @@ export const compute: ModuleCompute<P, R> = async params => {
     await connection.Sql.connect({ connectionUrl });
     return connection;
 };
-

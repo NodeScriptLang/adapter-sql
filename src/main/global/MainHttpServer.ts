@@ -14,7 +14,6 @@ export class MainHttpServer extends HttpServer {
 
     @dep() private sqlProtocolHandler!: SqlProtocolHandler;
 
-
     handler = new HttpChain([
         this.errorHandler,
         this.statusHandler,

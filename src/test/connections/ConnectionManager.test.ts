@@ -2,7 +2,6 @@ import assert from 'assert';
 
 import { runtime } from '../runtime.js';
 
-
 describe('Connection Manager', () => {
 
     beforeEach(async () => {

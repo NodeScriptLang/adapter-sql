@@ -6,6 +6,7 @@ import { SqlDomainImpl } from '../main/global/SqlDomainImpl.js';
 import { TestDb } from './TestDb.js';
 
 export class TestRuntime {
+
     app = new App();
 
     @dep({ cache: false }) Sql!: SqlDomainImpl;
@@ -14,7 +15,6 @@ export class TestRuntime {
     @config({ default: 'postgresql://postgres@localhost:5011' }) POSTGRES_BASE_URL!: string;
     @config({ default: 'mysql://root@localhost:5010' }) MYSQL_BASE_URL!: string;
     @config({ default: 'adaptersqltest' }) DB_NAME!: string;
-
 
     async setup() {
         this.app = new App();

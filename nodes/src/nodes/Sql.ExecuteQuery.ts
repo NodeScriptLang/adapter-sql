@@ -3,11 +3,11 @@ import { ModuleCompute, ModuleDefinition } from '@nodescript/core/types';
 
 import { requireConnection, SqlConnection } from '../lib/SqlConnection.js';
 
-type P = {
+interface P {
     connection: SqlConnection;
     query: string;
     params?: any[];
-};
+}
 type R = Promise<SqlQueryResult>;
 
 export const module: ModuleDefinition<P, R> = {

@@ -7,6 +7,7 @@ import { MySqlConnection } from './mysql/MySqlConnection.js';
 import { PostgresConnection } from './postgres/PostgresConnection.js';
 
 export abstract class BasePool {
+
     @dep() logger!: Logger;
 
     becameIdle = new Event<void>();
@@ -75,4 +76,5 @@ export abstract class BasePool {
             this.becameIdle.once(resolve);
         });
     }
+
 }

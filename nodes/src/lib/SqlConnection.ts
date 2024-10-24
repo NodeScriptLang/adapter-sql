@@ -22,9 +22,11 @@ export class SqlConnection {
         parsedUrl.password = '';
         const rpc = createHttpClient(sqlProtocol, {
             baseUrl: parsedUrl.href,
-            headers: secret ? {
-                authorization: `Bearer ${secret}`,
-            } : undefined,
+            headers: secret ?
+                {
+                    authorization: `Bearer ${secret}`,
+                } :
+                undefined,
         });
         Object.defineProperties(this, {
             connectionUrl: {

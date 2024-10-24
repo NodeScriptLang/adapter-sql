@@ -36,7 +36,6 @@ export class App extends BaseApp {
         await super.stop();
         await this.connectionManager.stop();
         await this.httpServer.stop();
-
     }
 
 }

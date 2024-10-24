@@ -7,6 +7,7 @@ import { PostgresConnection } from './PostgresConnection.js';
 const { Pool } = pg;
 
 export class PostgresPool extends BasePool {
+
     protected pool: PoolType;
 
     @metric()
@@ -61,4 +62,5 @@ export class PostgresPool extends BasePool {
     protected async closePool() {
         await this.pool.end();
     }
+
 }

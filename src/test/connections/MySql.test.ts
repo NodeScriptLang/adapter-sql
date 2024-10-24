@@ -2,7 +2,6 @@ import assert from 'assert';
 
 import { runtime } from '../runtime.js';
 
-
 describe('MySql Connections', () => {
     beforeEach(async () => {
         const connectionUrl = runtime.testMySqlUrl;
@@ -34,7 +33,7 @@ describe('MySql Connections', () => {
         const connectionUrl = runtime.testMySqlUrl;
         try {
             await runtime.Sql.query({ connectionUrl, query: 'SELECT * FROM nonexistent;', params: [] });
-        } catch (err) {
+        } catch (_err) {
             // ignore the error
         }
         const pool = runtime.app.connectionManager.getPool(connectionUrl);

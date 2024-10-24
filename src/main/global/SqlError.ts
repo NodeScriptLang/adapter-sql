@@ -1,4 +1,5 @@
 export class SqlError extends Error {
+
     override name = 'SqlError';
     status = 500;
     details: any;
@@ -11,4 +12,3 @@ export class SqlError extends Error {
     }
 
 }
-

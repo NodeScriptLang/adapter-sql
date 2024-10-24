@@ -4,8 +4,8 @@ import pg, { FieldDef, PoolClient } from 'pg';
 import { SqlError } from '../../global/SqlError.js';
 import { BaseConnection } from '../BaseConnection.js';
 
-
 export class PostgresConnection extends BaseConnection {
+
     private postgresTypes: Record<string, string>;
     constructor(
         protected override client: PoolClient
@@ -51,4 +51,5 @@ export class PostgresConnection extends BaseConnection {
             return fields.map(f => ({ name: f.name, type: this.postgresTypes[f.dataTypeID] }));
         }
     }
+
 }

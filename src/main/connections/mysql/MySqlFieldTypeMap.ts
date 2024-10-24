@@ -1,4 +1,4 @@
-export const MySqlFieldTypeMap: { [key: number]: string } = {
+export const MySqlFieldTypeMap: Record<number, string> = {
     0: 'DECIMAL',
     1: 'TINY',
     2: 'SHORT',

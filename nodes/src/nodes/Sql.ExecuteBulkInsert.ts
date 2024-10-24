@@ -4,11 +4,11 @@ import { ModuleCompute, ModuleDefinition } from '@nodescript/core/types';
 import { BulkInsertBuilder } from '../lib/BulkInsertBuilder.js';
 import { requireConnection, SqlConnection } from '../lib/SqlConnection.js';
 
-export type BulkInsertParams = {
+export interface BulkInsertParams {
     connection: SqlConnection;
     tableName: string;
-    rowData: Record<string, any>[];
-};
+    rowData: Array<Record<string, any>>;
+}
 
 type R = Promise<SqlQueryResult>;
 
@@ -59,4 +59,3 @@ export const compute: ModuleCompute<BulkInsertParams, R> = async params => {
     });
     return result;
 };
-

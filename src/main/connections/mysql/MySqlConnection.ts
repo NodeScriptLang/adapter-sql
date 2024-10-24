@@ -6,6 +6,7 @@ import { BaseConnection } from '../BaseConnection.js';
 import { getMySqlTypeByCode } from './MySqlFieldTypeMap.js';
 
 export class MySqlConnection extends BaseConnection {
+
     constructor(
        protected override client: PoolConnection
     ) {
@@ -19,7 +20,6 @@ export class MySqlConnection extends BaseConnection {
             if (Array.isArray(res)) {
                 const rows = res as RowDataPacket[];
 
-
                 return {
                     rows,
                     rowCount: rows.length,
@@ -28,7 +28,6 @@ export class MySqlConnection extends BaseConnection {
             }
             const resultHeader = res as ResultSetHeader;
             return resultHeader.affectedRows ? { rowCount: resultHeader.affectedRows } : {};
-
         } catch (err) {
             throw new SqlError(err);
         } finally {

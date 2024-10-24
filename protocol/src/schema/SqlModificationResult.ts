@@ -3,7 +3,7 @@ import { Schema } from 'airtight';
 import { FieldInfo, FieldInfoSchema } from './FieldInfo.js';
 
 export interface SqlModificationResult {
-    rows?: Record<string, any>[];
+    rows?: Array<Record<string, any>>;
     fieldData?: FieldInfo[];
     affectedRowCount: number;
 }

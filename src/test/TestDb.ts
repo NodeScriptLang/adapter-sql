@@ -5,6 +5,7 @@ import pg from 'pg';
 const { Pool } = pg;
 
 export class TestDb {
+
     @config({ default: 'adapter_sql_test' }) DB_NAME!: string;
 
     private postgresPool: pg.Pool | null = null;
@@ -16,9 +17,14 @@ export class TestDb {
     }
 
     async closePools() {
-        if (this.postgresPool) { await this.postgresPool.end(); }
-        if (this.mysqlPool) { await this.mysqlPool.end(); }
+        if (this.postgresPool) {
+            await this.postgresPool.end();
+        }
+        if (this.mysqlPool) {
+            await this.mysqlPool.end();
+        }
     }
+
     async dropPostgres() {
         const client = await this.postgresPool!.connect();
         await client.query(`DROP DATABASE IF EXISTS ${this.DB_NAME};`);

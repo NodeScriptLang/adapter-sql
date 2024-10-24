@@ -1,9 +1,9 @@
 import { BulkInsertParams } from '../nodes/Sql.ExecuteBulkInsert.js';
 
-
 export class BulkInsertBuilder {
+
     private connectionUrl: string;
-    private rowData: Record<string, any>[];
+    private rowData: Array<Record<string, any>>;
     private tableName: string;
     private queryParams: any[] = [];
 
@@ -43,4 +43,3 @@ export class BulkInsertBuilder {
     }
 
 }
-
