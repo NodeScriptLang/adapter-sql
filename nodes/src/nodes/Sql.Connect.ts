@@ -9,7 +9,7 @@ interface P {
 type R = Promise<unknown>;
 
 export const module: ModuleDefinition<P, R> = {
-    version: '0.0.1',
+    version: '0.0.2',
     moduleName: 'SQL / Connect',
     description: 'Connects to a SQL database. Returns the connection required by other nodes.',
     keywords: ['Sql', 'database', 'storage', 'connect'],
@@ -34,6 +34,9 @@ export const module: ModuleDefinition<P, R> = {
     },
     evalMode: 'manual',
     cacheMode: 'always',
+    attributes: {
+        externalDocs: 'https://github.com/NodeScriptLang/adapter-sql'
+    }
 };
 
 export const compute: ModuleCompute<P, R> = async params => {
