@@ -1,6 +1,6 @@
 {
     "name": "@nodescript/adapter-sql-protocol",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "description": "SQL Adapter Protocol",
     "type": "module",
     "sideEffects": false,
